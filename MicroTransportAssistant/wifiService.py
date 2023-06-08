@@ -2,6 +2,7 @@
 import time
 import sys
 import network
+from secret import WIFI_PASSWORD
 
 def connect():
     
@@ -10,7 +11,7 @@ def connect():
     time.sleep(0.5)
     wifi.active(True)
 
-    wifi.connect('FBI Surveillance Van', 'Karamba69.420')
+    wifi.connect('FBI Surveillance Van', WIFI_PASSWORD)
 
     for i in range(1, 5):
         time.sleep(2)

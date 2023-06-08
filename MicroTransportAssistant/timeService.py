@@ -5,8 +5,8 @@ GMT_OFFSET = 2 * 60 * 60
 
 alarmsOnWeekday = [False, True, True, True,True, False, False]  # Make sure it is sorted
 
-alarmHour = 20
-alarmMinute = 25
+alarmHour = 6
+alarmMinute = 20
 
 
 # Offset to GMT+0
