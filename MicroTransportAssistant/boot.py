@@ -1,21 +1,28 @@
-# boot.py -- run on boot-up
 from wifiService import connect
 import weatherApi
 from notificationService import easyMessage
 import timeService
 from time import sleep
 from machine import Pin
+import gc
 
-switchPin = Pin(2, Pin.IN)
+switchPin = Pin(4, Pin.IN)
+led = Pin(2, Pin.OUT)
+
+led.on()
 
 connect()
+
 easyMessage('Booting up')
 
 while(True):
     secondsUntilNextAlarm = timeService.secondsUntilNextAlarm()
     print(f"Sleeping for {secondsUntilNextAlarm} seconds")
     sleep(secondsUntilNextAlarm)
-    if(switchPin.value()):
+    print('Woke up')
+    gc.mem_free()
+    if(switchPin.value() or True):
+        connect()
         w = weatherApi.apiWeather()
         isGoodWeather = weatherApi.shouldTakeBike(w)
 

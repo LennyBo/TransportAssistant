@@ -3,7 +3,8 @@ import time
 
 GMT_OFFSET = 2 * 60 * 60
 
-alarmsOnWeekday = [False, True, True, True,True, False, False]  # Make sure it is sorted
+alarmsOnWeekday = [True, True, True, True, True,
+                   True, True]  # Make sure it is sorted
 
 alarmHour = 6
 alarmMinute = 20
