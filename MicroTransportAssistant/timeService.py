@@ -1,10 +1,7 @@
 import ntptime
 import time
 
-GMT_OFFSET = 2 * 60 * 60
-
-alarmsOnWeekday = [True, True, True, True, True,
-                   True, True]  # Make sure it is sorted
+alarmsOnWeekday = [False, True, True, True, True, False, False]  # Make sure it is sorted
 
 alarmHour = 6
 alarmMinute = 20
@@ -13,47 +10,33 @@ alarmMinute = 20
 # Offset to GMT+0
 alarmHour -= 2
 
-def syncTime():
-    ntptime.settime()
-    
 
-def secondsUntilNextAlarm():
-    syncTime()
+max_retries = 3
+retry_delay = 5  # seconds
+
+tEpoch = 0
+
+def loadTime():
+    global tEpoch
+    tEpoch = ntptime.time()
+
+def deltaToAlarm():
     t = currentTime()
-    
-    dayOfWeek = t[6]
-    isAlarmTimePassed = not (t[3] < alarmHour or (t[3] == alarmHour and t[4] < alarmMinute))
-    daysToAdd = daysUntilNextAlarm(dayOfWeek,isAlarmTimePassed)
-    
-    
-    # Set correct time
+    print("t",t)
     timeAlarm = getTimeOf(t,alarmHour,alarmMinute)
-    
-    epochTimeAlarm = time.mktime(timeAlarm) + daysToAdd * 24 * 60 * 60
-    
-    return epochTimeAlarm - time.time()
-    
-    
+    print("timeAlarm", timeAlarm)
+    epochTimeAlarm = time.mktime(timeAlarm)
+    print("epochTimeAlarm", epochTimeAlarm)
+    return epochTimeAlarm - tEpoch
     
 
-def daysUntilNextAlarm(weekDay,isPassedToday):
-    count = 0
-    if isPassedToday:
-        weekDay = (weekDay + 1) % 7 # If we passed the time of alarm we start on the next day
-        count += 1
-    i = weekDay
-    while True:
-        if(not alarmsOnWeekday[i]):
-            count += 1
-        else:
-            return count
-        i = (i + 1) % 7
-    
-    
-
+def isAlarmDay():
+    t = currentTime()
+    dayOfWeek = t[6]
+    return alarmsOnWeekday[dayOfWeek]
 
 def currentTime():
-    return time.gmtime(time.time())
+    return time.gmtime(tEpoch)
 
 
 def getTimeOf(t,hour,minute):

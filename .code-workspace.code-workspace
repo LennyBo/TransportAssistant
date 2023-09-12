@@ -1,0 +1,12 @@
+{
+    "folders": [
+        {
+            "name": "MicroTransportAssistant",
+            "path": "MicroTransportAssistant"
+        },
+        {
+            "name": "serial:/COM8",
+            "uri": "serial://com8"
+        }
+    ]
+}

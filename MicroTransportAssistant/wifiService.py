@@ -2,27 +2,23 @@
 import time
 import sys
 import network
-from secret import WIFI_PASSWORD
+from secret import WIFI_PASSWORD, WIFI_SSID
+
+
 
 def connect():
-    
-    wifi = network.WLAN(network.STA_IF)
-    wifi.active(False)
-    time.sleep(0.5)
-    wifi.active(True)
+    sta_if = network.WLAN(network.STA_IF)  # Create a station interface object
+    if not sta_if.isconnected():
+        print('Connecting to Wi-Fi...')
+        sta_if.active(True)  # Activate the station interface
+        # Connect to the Wi-Fi network
+        sta_if.connect(WIFI_SSID, WIFI_PASSWORD)
 
-    wifi.connect('FBI Surveillance Van', WIFI_PASSWORD)
+        while not sta_if.isconnected():
+            print(f"Waiting...")
+            time.sleep(1)
 
-    for i in range(1, 5):
-        time.sleep(2)
-        if wifi.isconnected():
-            print(wifi.ifconfig())
-            break
-        else:
-            print(f"unable to connect trying again {5 - i}")
-
-    if wifi.isconnected():
-        print('Wifi connection success')
-    else:
-        print('Failed to connect to Wifi\nExiting script')
-        sys.exit(-1)
+    print('Wi-Fi connection successful!')
+    print(f"Network:{WIFI_SSID}")
+    print(f"IP address: {sta_if.ifconfig()[0]}")
+    time.sleep(5)
