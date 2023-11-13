@@ -8,6 +8,12 @@ import gc
 import os
 
 
+switch = machine.Pin(15, machine.Pin.IN)
+
+print(switch)
+
+exit()
+
 led = machine.Pin(2, machine.Pin.OUT)
 led.value(1)
 f = None
@@ -35,21 +41,25 @@ timeService.loadTime()
 if(timeService.isAlarmDay()):
     deltaSeconds = timeService.deltaToAlarm()
     print(deltaSeconds)
-    if(abs(deltaSeconds) < 60):
+    if(abs(deltaSeconds) < 300):
         print("Predicting")
         print('Fetching weather')
         gc.collect()
         w = weatherApi.apiWeather()
         gc.collect()
         print('Evaluate Weather')
+        
         isGoodWeather = weatherApi.shouldTakeBike(w)
-
+        
+        weather = [x for x in w.values()]
+        wStr = f"In the morning: {weather[0][2]}°C - {weather[0][1]}%0A" + \
+               f"In the afternoon: {weather[1][2]}°C - {weather[1][1]}"
         if(isGoodWeather):
             print('Weather looks good')
-            easyMessage("Weather looks good")
+            easyMessage(f"Weather looks good%0A{wStr}")
         else:
             print('Bad weather')
-            easyMessage("Bad weather")
+            easyMessage(f"Bad weather%0A{wStr}")
         print(f"Sleeping for {timeToSleep} ms")
         deepsleep(timeToSleep)
     elif(deltaSeconds < 0):
