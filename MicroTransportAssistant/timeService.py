@@ -4,7 +4,7 @@ import time
 alarmsOnWeekday = [False, True, True, True, True, False, False]  # Make sure it is sorted
 
 alarmHour = 6
-alarmMinute = 20
+alarmMinute = 25
 
 
 # Offset to GMT+0
